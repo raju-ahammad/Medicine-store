@@ -45,7 +45,7 @@ def cheakout(request):
     login_form = LoginForm()
     address_form = AddressForm()
 
-    shipping_adress = request.session.get("shipping_id", None)
+    shipping_adress = request.session.get("shipping_adress_id", None)
 
     if user.is_authenticated:
         billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(user=user, email=user.email)
@@ -54,9 +54,18 @@ def cheakout(request):
         order_obj, order_ojbect_created = Order.objects.new_or_get(billing_profile, cart_obj)
         if shipping_adress:
             order_obj.shipping_adress = Address.objects.get(id=shipping_adress)
-            del request.session["shipping_id"]
+            del request.session["shipping_adress_id"]
         if shipping_adress:
             order_obj.save()
+
+    if request.method == 'POST':
+        "some check that order is done"
+        is_done = order_obj.check_done()
+        if is_done:
+            order_obj.mark_paid()
+            request.session['cart_item'] = 0
+            del request.session['cart_id']
+            return redirect("cheakout_done")
 
 
 
@@ -69,3 +78,7 @@ def cheakout(request):
 
     }
     return render(request, "cart/checkout.html", context)
+
+
+def cheakout_done_view(request):
+    return render(request, "cart/thankyou.html", {})

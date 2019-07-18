@@ -16,16 +16,35 @@
 <br>
 <div class="">
   {% if not billing_profile %}
-      <div class="row">
-        <div class="col-sm-7">
-          <p>Login</p>
-          {% include 'cart/forms.html' with form=login_form next=request.build_absulate_uri %}
-        </div>
-        <br>
-        <div class="col-sm-3">
-           <p>Continue as Guest</p>
+      <br>
+      <br>
+      <div class="container ml-5 mr-4">
+        <div class="card bg-light " style="margin: auto; width: 70%;">
+          <div class="row">
+            <div class="col-sm-3 mt-3">
+              <div class="ml-4 mt-4">
+                {% if user.is_authenticated %}
+                <p class="mb-3" ><a class="text-secondary" href="{% url 'password_change' %}">Change Password </a></p>
+                <p class="mb-3" ><a class="text-secondary" href="{% url 'password_reset' %}"> Password Reset</a></p>
+                {% else %}
+                <p class="mb-3" ><a class="text-secondary" href="{% url 'signup' %}">SignUp </a></p>
+                <p class="mb-3" ><a class="text-secondary" href="{% url 'login' %}">Login </a></p>
+                {% endif %}
+
+              </div>
+
+            </div>
+            <div class="vl" style="border-left: 1px solid gray; height: 460px;" ></div>
+            <div class="col-sm-8 mt-3">
+              <div class="form">
+                {% include 'cart/forms.html' with form=login_form next=request.build_absulate_uri %}
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
+      <br>
       <br>
     {% else %}
        {% if not object.shipping_adress %}
@@ -48,14 +67,24 @@
            </div>
          </div>
          {% else %}
-         <div class="col-md-6">
 
-           <div class="row mb-5">
-             <div class="col-md-12">
-               <h2 class="h3 mb-3 text-black">Your Order</h2>
+           <div class="row">
+            <div class="col-md-8 mb-8 mb-md-0 m-auto">
+              <br>
+               <h2 class="h3 mb-3 text-black text-center">Your Order</h2>
                <div class="p-3 p-lg-5 border">
                  <table class="table site-block-order-table mb-5">
-                   <p class="text-center"> Order id : {{ object.order_id }}</p>
+                   <div class="text ml-4">
+                     <p> Name: {{ object.shipping_adress.first_name }} {{ object.shipping_adress.last_name }}</p>
+                     <p> Phone: {{ object.shipping_adress.phone }}</p>
+                     <p> Adress: {{ object.shipping_adress.adress_1 }}</p>
+                     <p class="text"> Order id : {{ object.order_id }}</p>
+
+                   </div>
+
+
+                   <br>
+                   <br>
                    <thead>
                      <th>Product</th>
                      <th>Total</th>
@@ -83,53 +112,19 @@
                    </tbody>
                  </table>
 
-                 <div class="border mb-3">
-                   <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button"
-                       aria-expanded="false" aria-controls="collapsebank">Direct Bank Transfer</a></h3>
-
-                   <div class="collapse" id="collapsebank">
-                     <div class="py-2 px-4">
-                       <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the
-                         payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                     </div>
-                   </div>
-                 </div>
-
-                 <div class="border mb-3">
-                   <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsecheque" role="button"
-                       aria-expanded="false" aria-controls="collapsecheque">Cheque Payment</a></h3>
-
-                   <div class="collapse" id="collapsecheque">
-                     <div class="py-2 px-4">
-                       <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the
-                         payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                     </div>
-                   </div>
-                 </div>
-
-                 <div class="border mb-5">
-                   <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsepaypal" role="button"
-                       aria-expanded="false" aria-controls="collapsepaypal">Paypal</a></h3>
-
-                   <div class="collapse" id="collapsepaypal">
-                     <div class="py-2 px-4">
-                       <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the
-                         payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                     </div>
-                   </div>
-                 </div>
 
                  <div class="form-group">
-                   <button class="btn btn-primary btn-lg btn-block" onclick="window.location='thankyou.html'">Place
-                     Order</button>
-                 </div>
+                   <form class="form" action="" method="POST">  {% csrf_token %}
+                     <button class="btn btn-primary btn-lg btn-block" type="submit">Place
+                       Order</button>
+                   </form>
+
 
                </div>
              </div>
            </div>
 
          </div>
-       </div>
 
        {% endif %}
      </div>
