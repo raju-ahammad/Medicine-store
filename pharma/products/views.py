@@ -1,6 +1,6 @@
 from django.shortcuts import render, Http404,  get_object_or_404
-from .models import Product
-from django.views.generic import ListView, DetailView
+from .models import Product, Category
+from django.views.generic import ListView, DetailView, TemplateView
 from cart.models import Cart
 
 
@@ -59,3 +59,28 @@ class SlugDetailView(DetailView):
         slug = self.kwargs.get('slug')
         instance = get_object_or_404(Product, slug=slug, active=True)
         return instance
+
+
+
+class CategoryView(ListView):
+    model    = Product
+    template_name = 'product/category.html'
+    context_object_name = 'category_list'
+    paginate_by = 8
+
+    def get_queryset(self, *args, **kwargs):
+        self.category = get_object_or_404(Category, pk=self.kwargs['pk'])
+        return Product.objects.filter(category=self.category)
+
+    def get_context_data(self,**kwargs):
+        context = super(CategoryView, self).get_context_data(**kwargs)
+        context['category'] = self.category
+        return context
+
+
+class AboutUs(TemplateView):
+	template_name = 'product/about.html'
+
+
+class AboutUs(TemplateView):
+	template_name = 'product/contact.html'

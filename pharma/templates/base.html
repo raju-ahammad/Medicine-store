@@ -1,10 +1,19 @@
+{% url 'home' as home_url %}
+{% url 'about' as about_url %}
+{% url 'contact' as contact_url %}
+{% url 'cart' as cart_url %}
+{% url 'store' as store_url %}
+{% url 'category' as category_url %}
+{% url 'login' as login_url %}
+{% url 'logout' as logout_url %}
+{% url 'signup' as signup_url %}
+
 <!DOCTYPE html>
 {% load static %}
 
 <html lang="en">
 
 <head>
-  <title>Pharma &mdash; Colorlib Template</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -22,6 +31,8 @@
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+  <title> {% block 'title'%} {{ object }} {% endblock%} </title>
+
 </head>
 
 <body>
@@ -34,8 +45,9 @@
       <div class="search-wrap">
         <div class="container">
           <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
-          <form action="#" method="post">
-            <input type="text" class="form-control" placeholder="Search keyword and hit enter...">
+          <form method="GET" action="{% url 'query' %}" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Enter Search key word" name='q' aria-label="Search"
+            value="{{ request.GET.q }}">
           </form>
         </div>
       </div>
@@ -50,28 +62,19 @@
           <div class="main-nav d-none d-lg-block">
             <nav class="site-navigation text-right text-md-center" role="navigation">
               <ul class="site-menu js-clone-nav d-none d-lg-block">
-                <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'store' %}">Store</a></li>
+                <li class="{% if request.path == home_url %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
+                <li class="{% if request.path == store_url %}active{% endif %}" ><a href="{% url 'store' %}">Store</a></li>
                 <li class="has-children">
-                  <a href="#">Dropdown</a>
+                  <a href="#">Category</a>
                   <ul class="dropdown">
-                    <li><a href="#">Supplements</a></li>
-                    <li class="has-children">
-                      <a href="#">Vitamins</a>
-                      <ul class="dropdown">
-                        <li><a href="#">Supplements</a></li>
-                        <li><a href="#">Vitamins</a></li>
-                        <li><a href="#">Diet &amp; Nutrition</a></li>
-                        <li><a href="#">Tea &amp; Coffee</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#">Diet &amp; Nutrition</a></li>
-                    <li><a href="#">Tea &amp; Coffee</a></li>
-
+                    {% for cat in categories %}
+                    <li class="{% if request.path == category_url %}active{% endif %}"  ><a class="dropdown-item" href="{% url 'category' pk=cat.id %}">{{ cat.name }}</a></li>
+                    {% endfor %}
                   </ul>
                 </li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="{% url 'cart' %}">Cart</a> </li>
+                <li class="{% if request.path == about_url %}active{% endif %}" ><a href="{% url 'about' %}">About</a></li>
+                <li class="{% if request.path == cart_url %}active{% endif %}" ><a href="{% url 'cart' %}">Cart</a> </li>
+                <li class="{% if request.path == contact_url %}active{% endif %}" ><a href="{% url 'contact' %}">Contact</a> </li>
                 <li class="has-children">
                   <a class="text-info" href="#">{{ user.username }}</a>
                   <ul class="dropdown">
@@ -152,10 +155,9 @@
           <div class="col-lg-3 mx-auto mb-5 mb-lg-0">
             <h3 class="footer-heading mb-4">Quick Links</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Supplements</a></li>
-              <li><a href="#">Vitamins</a></li>
-              <li><a href="#">Diet &amp; Nutrition</a></li>
-              <li><a href="#">Tea &amp; Coffee</a></li>
+              {% for cat in categories %}
+              <li class="{% if request.path == category_url %}active{% endif %}"  ><a class="dropdown-item" href="{% url 'category' pk=cat.id %}">{{ cat.name }}</a></li>
+              {% endfor %}
             </ul>
           </div>
 

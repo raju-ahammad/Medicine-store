@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} products {% endblock %}
+{% block content %}
+<div class="container">
+  <div class="">
+    <div class="row">
+      {% if query %}
+      <div class="col-sm-12 mt-3">
+        <h4 class="text-info text-center" >search for - {{ query }}</h4>
+      </div>
+      {% endif %}
+      <br>
+    </div>
+    <hr>
+    <br>
+    <p>product here</p>
+    <div class="row">
+      {% for post in popular %}
+      <div class="col-sm-6 col-lg-4 text-center item mb-4">
+        <span class=""></span>
+        <a href="{% url 'slug_detail' post.slug %}"> <img src="{{ post.image.url }}" alt="Image"></a>
+        <h3 class="text-dark"><a href="{% url 'slug_detail' post.slug %}">{{ post.title }}</a></h3>
+        <p class="price"><del>${{ post.pre_price }}</del> &mdash; ${{ post.price }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

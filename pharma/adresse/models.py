@@ -26,6 +26,7 @@ class Address(models.Model):
     address_type     = models.CharField(max_length=120, null=True, blank=True, choices=ADRESS_TYPE_CHOICES)
     first_name       = models.CharField(max_length=120)
     last_name        = models.CharField(max_length=120)
+    prescription     = models.ImageField(default='default.png', blank = True, null=True)
     country          = models.CharField(max_length=120, default='bangladesh', choices=ADRESS_CHOICES )
     adress_1         = models.CharField(max_length=120)
     adress_2         = models.CharField(max_length=120, null=True, blank=True)

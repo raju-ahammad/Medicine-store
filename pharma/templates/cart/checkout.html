@@ -59,11 +59,50 @@
            </div>
 
        <div class="row">
-         <div class="col-md-8 mb-8 mb-md-0 m-auto">
+         <div class="col-md-6 mb-5 mb-md-0">
            <h2 class="h3 mb-3 text-black">Shipping Adress </h2>
 
            <div class="p-3 p-lg-5 border">
               {% include 'cart/addressform.html' with form=address_form next_url=request.build_absulate_uri %}
+           </div>
+         </div>
+
+
+         <div class="col-md-6 mb-5 mb-md-0">
+           <br>
+           <br>
+           <div class="p-3 p-lg-5 border">
+             <h2 class="h3 mb-3 text-black text-center">Your Order</h2>
+               <table class="table site-block-order-table mb-5">
+                 <br>
+                 <br>
+                 <br>
+                 <thead>
+                   <th>Product</th>
+                   <th>Total</th>
+                 </thead>
+                 <tbody>
+                   {% for product in cart.product.all %}
+                   <tr>
+                     <td>{{ product.title }}</td>
+                     <td>${{ product.price }}</td>
+                   </tr>
+                     {% endfor %}
+
+                   <tr>
+                     <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+                     <td class="text-black">${{ object.cart.subtotal }}</td>
+                   </tr>
+                   <tr>
+                     <td class="text-black font-weight-bold"><strong>Shipping Fee</strong></td>
+                     <td class="text-black">${{ object.shipping_total }}</td>
+                   </tr>
+                   <tr>
+                     <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+                     <td class="text-black font-weight-bold"><strong>${{ object.total }}</strong></td>
+                   </tr>
+                 </tbody>
+               </table>
            </div>
          </div>
          {% else %}
@@ -122,6 +161,8 @@
 
                </div>
              </div>
+
+
            </div>
 
          </div>
